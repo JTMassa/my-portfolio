@@ -15,7 +15,7 @@ on:
      steps:
           - uses: actions/checkout@v4
            - name: Build image
-        run: docker build -t kserge2001/portfolio .
+        run: docker build -t JTMassa/portfolio .
       
       - name: Push image
         run: |
