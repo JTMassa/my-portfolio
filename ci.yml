@@ -1,0 +1,24 @@
+
+name: CI
+
+on:
+   push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+   Jobs:
+  
+  build:
+    
+    runs-on: ubuntu-latest
+     steps:
+          - uses: actions/checkout@v4
+           - name: Build image
+        run: docker build -t kserge2001/portfolio .
+      
+      - name: Push image
+        run: |
+        docker login -u jtmassa -p ${{secrets.REGISTRY_PASS}}
+        docker push jtmassa/portfolio
+          
