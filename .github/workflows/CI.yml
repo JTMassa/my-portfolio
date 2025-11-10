@@ -15,10 +15,10 @@ on:
      steps:
           - uses: actions/checkout@v4
            - name: Build image
-        run: docker build -t JTMassa/portfolio .
+        run: docker build -t ${{secrets.DOCKER_USERNAME}}/portfolio .
       
       - name: Push image
         run: |
-        docker login -u JTMassa -p ${{secrets.REGISTRY_PASS}}
-        docker push JTMassa/portfolio
+        docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.REGISTRY_PASS}}
+        docker push ${{secrets.DOCKER_USERNAME}}/portfolio
           
