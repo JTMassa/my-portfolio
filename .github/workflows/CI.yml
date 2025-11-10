@@ -19,6 +19,6 @@ on:
       
       - name: Push image
         run: |
-        docker login -u jtmassa -p ${{secrets.REGISTRY_PASS}}
-        docker push jtmassa/portfolio
+        docker login -u JTMassa -p ${{secrets.REGISTRY_PASS}}
+        docker push JTMassa/portfolio
           
