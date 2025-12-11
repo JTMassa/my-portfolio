@@ -15,12 +15,12 @@ jobs:
     steps:
       
       - uses: actions/checkout@v4
-      - name: Build Image
-        run: docker build -t  jtmassa/my-portfolio  .
+      - name: Build image
+        run: docker build -t  jtmassa/portfolio  .
 
       
       - name: Push image
         run: |
             docker login -u jtmassa -p $ { { secrets.REGISTRY_PASS }}
-            docker push jtmassa/my-portfolio
+            docker push jtmassa/portfolio
           
