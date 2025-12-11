@@ -21,6 +21,6 @@ jobs:
       
       - name: Push image
         run: |
-            docker login -u JTMassa -p $ {{secrets.REGISTRY_PASS}}
+            docker login -u JTMassa -p $ { { secrets.REGISTRY_PASS }}
             docker push JTMassa/my-portfolio
           
