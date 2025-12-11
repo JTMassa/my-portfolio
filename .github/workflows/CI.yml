@@ -16,11 +16,11 @@ jobs:
       
       - uses: actions/checkout@v4
       - name: Build Image
-        run: docker build -t  JTMassa/my-portfolio  .
+        run: docker build -t  jtmassa/my-portfolio  .
 
       
       - name: Push image
         run: |
-            docker login -u JTMassa -p $ { { secrets.REGISTRY_PASS }}
-            docker push JTMassa/my-portfolio
+            docker login -u jtmassa -p $ { { secrets.REGISTRY_PASS }}
+            docker push jtmassa/my-portfolio
           
