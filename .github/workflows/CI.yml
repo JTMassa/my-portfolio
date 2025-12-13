@@ -1,41 +1,59 @@
 name: CI
 
 on:
- 
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  
+
   build:
-    
     runs-on: ubuntu-latest
+
     steps:
-      
       - uses: actions/checkout@v4
-      - name: Build image
+
+      # ✅ Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # ✅ Login to ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # ✅ Build & Tag Docker Images
+      - name: Build Docker images
         run: |
-          docker build -t  ${{secrets.REGISTRY_USER}}/mimbiss:${{github.run_number}}  .
-          docker build -t  ${{secrets.REGISTRY_USER}}/mimbiss  .
-      
-      - name: Push image
+          docker build -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }} .
+          docker build -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest .
+
+      # ✅ Push to ECR
+      - name: Push Docker images
         run: |
-            docker login -u ${{secrets.REGISTRY_USER}} -p ${{ secrets.REGISTRY_PASS }}
-            docker push ${{secrets.REGISTRY_USER}}/mimbiss:${{github.run_number}}
-            docker push ${{secrets.REGISTRY_USER}}/mimbiss
+          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }}
+          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
+
   Deploy:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
       - name: SSH to Server
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{secrets.HOST}}
-          username: ${{secrets.USERNAME}}
-          key: ${{secrets.KEY}}
-          port: ${{secrets.PORT}}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
           script: |
-                  docker rm -f resume
-                  docker run -d --name resume -p 8080:5001 ${{secrets.REGISTRY_USER}}/mimbiss:${{github.run_number}}
+            docker rm -f resume || true
+            docker pull ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }}
+            docker run -d --name resume -p 8080:5001 \
+              ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }}
+
