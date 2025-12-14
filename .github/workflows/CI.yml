@@ -30,14 +30,15 @@ jobs:
       # ✅ Build & Tag Docker Images
       - name: Build Docker images
         run: |
-          docker build -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }} .
-          docker build -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest .
+          docker build -t ${{ secrets.ECR_REGISTRY }}/jull_docker_image:${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }} .
+          docker build -t ${{ secrets.ECR_REGISTRY }}/jull_docker_image:${{ secrets.ECR_REPOSITORY }}:latest .
 
       # ✅ Push to ECR
       - name: Push Docker images
         run: |
-          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }}
-          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
+          docker login -u ${{secrets.REGISTRY_USER}} -p ${{ secrets.REGISTRY_PASS }}
+          docker push ${{ secrets.ECR_REGISTRY }}/jull_docker_image:${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }}
+          docker push ${{ secrets.ECR_REGISTRY }}/jull_docker_image:${{ secrets.ECR_REPOSITORY }}:latest
 
   Deploy:
     needs: build
