@@ -61,6 +61,6 @@ jobs:
           key: ${{ secrets.KEY }}
           #port: ${{ secrets.PORT }}
           script: |
-            docker run -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }} 
-            docker run -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest  
+            docker run -d $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.run_number }}  
+            docker run -d $ECR_REGISTRY/$ECR_REPOSITORY:latest 
               
