@@ -61,8 +61,6 @@ jobs:
           key: ${{ secrets.KEY }}
           #port: ${{ secrets.PORT }}
           script: |
-            docker rm -f resume || true
-            docker pull $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.run_number }} 
-            docker run -d -p 8080:5001 $ECR_REGISTRY/$ECR_REPOSITORY:latest 
-
+            docker build -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.run_number }} .
+            docker build -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest . 
               
