@@ -53,14 +53,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH to Server
-        uses: appleboy/ssh-action@v1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          #port: ${{ secrets.PORT }}
-          script: |
-            docker run -d $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.run_number }}  
-            docker run -d $ECR_REGISTRY/$ECR_REPOSITORY:latest 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: Tasks definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ecs-task-def.json
+          container-name: my-portfolio-container
+          image: $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.run_number }} 
+
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry  }}
+          ECR_REPOSITORY: jull_docker_image
+
+      - name: Deploy tasks definition 
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: my-portfolio-service
+          cluster: my-portfolio-cluster
+          wait-for-service-stability: true
+          
+
+      
+      
               
