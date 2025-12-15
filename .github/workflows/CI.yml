@@ -63,6 +63,6 @@ jobs:
           script: |
             docker rm -f resume || true
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.run_number }} 
-            docker run -d --name resume -p 8080:5001 \
-              $ECR_REGISTRY/$ECR_REPOSITORY:latest
+            docker run -d --name resume -p 8080:5001 
+              $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.run_number }}
 
