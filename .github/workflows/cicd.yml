@@ -16,7 +16,7 @@ jobs:
               with:
                   python-version: ${{ env.python-version }} # or $python-version
             - name: Install dependencies
-              run: pip install -r requirements.txt
+              run: pip install pytest
 
             - name: Run tests
               run: pytest
