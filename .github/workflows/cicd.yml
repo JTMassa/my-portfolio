@@ -47,12 +47,12 @@ jobs:
                ${{ steps.login-ecr.outputs.registry }}/utc_app/portfolio:latest
 
             
-            - name: Trivy image scan 
-              uses: aquasecurity/trivy-action@master
+            - name: Trivy scan
+              uses: aquasecurity/trivy-action@0.20.0
               with:
-               image-ref: ${{ env.ECR_REPO }}:latest
+               image-ref: ${{ steps.login-ecr.outputs.registry }}/utc_app/portfolio:latest
                format: table
-               exit-code: '1' 
+               exit-code: 1
                severity: HIGH,CRITICAL
                 
             - name: Push image to Amazon ECR
