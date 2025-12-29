@@ -55,9 +55,10 @@ jobs:
                exit-code: 1
                severity: HIGH,CRITICAL
                 
-            - name: Push image to Amazon ECR
+            - name: Push image
               run: |
-               docker push ${{env.ECR_REPO}}:latest
+               docker push \
+               ${{ steps.login-ecr.outputs.registry }}/utc_app/portfolio:latest
 
            
                 
