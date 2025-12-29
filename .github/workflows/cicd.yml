@@ -57,8 +57,7 @@ jobs:
                 
             - name: Push image
               run: |
-               docker push \
-               ${{ steps.login-ecr.outputs.registry }}/utc_app/portfolio:latest
+               docker push 591735895336.dkr.ecr.us-east-1.amazonaws.com/utc_app:latest
 
            
                 
