@@ -43,8 +43,7 @@ jobs:
               
             - name: Tag image for ECR
               run: |
-               docker tag portfolio:latest \
-               ${{ steps.login-ecr.outputs.registry }}latest
+               docker tag ${{env.IMAGE_NAME}}:latest ${{env.ECR_REPO}}:latest
 
             
             - name: Trivy scan
@@ -57,7 +56,6 @@ jobs:
                 
             - name: Push image
               run: |
-               docker push \
-               ${{ steps.login-ecr.outputs.registry }}:latest
+               docker push ${{env.ECR_REPO}}:latest
            
     
