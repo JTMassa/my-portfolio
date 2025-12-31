@@ -32,13 +32,13 @@
     }
   ],
   "cpu": "256",
-  "executionRoleArn": "arn:aws:iam::315558363288:role/nginx-fargate-ecs-task-execution-role",
+  "executionRoleArn": "arn:aws:iam::591735895336:role/nginx-fargate-ecs-task-execution-role",
   "family": "nginx-fargate-task",
   "memory": "512",
   "networkMode": "awsvpc",
   "placementConstraints": [],
   "registeredAt": "2025-12-03T03:15:49.966Z",
-  "registeredBy": "arn:aws:iam::315558363288:user/terraformuser",
+  "registeredBy": "arn:aws:iam::591735895336:user/terraformuser",
   "requiresAttributes": [
     {
       "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
